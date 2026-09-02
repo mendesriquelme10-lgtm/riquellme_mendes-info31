@@ -10,20 +10,20 @@ body {
   padding: 24px;
   color: #1f2933;
   font-family: Arial, sans-serif;
-  background: #f4f7f5;
+  background: #dfeee3;
 }
 
 .card {
   width: min(100%, 560px);
   padding: 32px;
   background: #ffffff;
-  border-left: 8px solid #1f8f3a;
+  border-left: 8px solid #0e7920;
   box-shadow: 0 18px 45px rgba(0, 48, 24, 0.12);
 }
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #1f8f3a;
+  color: #0e7920;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -51,14 +51,14 @@ button {
   color: #ffffff;
   font: inherit;
   font-weight: 700;
-  background: #005c2e;
+  background: #0e7920;
   border: 0;
   border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  background: #004522;
+  background: #095b18;
 }
 
 button:focus-visible {

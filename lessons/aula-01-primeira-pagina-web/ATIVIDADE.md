@@ -34,7 +34,7 @@ Preencha individualmente [`docs/mapa-pre-requisitos.md`](./docs/mapa-pre-requisi
    python -m http.server 8000
    ```
 
-2. Anote a rota escolhida: `[ ] npm/npx` ou `[ ] Python`.
+2. Anote a rota escolhida: `[x] npm/npx` ou `[ ] Python`.
 3. Abra a URL informada no terminal.
 4. Não abra o HTML por duplo clique: a página deve usar `http://`.
 5. Use o painel **Network** para localizar os três recursos do projeto.
@@ -78,9 +78,7 @@ git log -1 --oneline
 
 ## Ticket de saída
 
-Responda em até quatro linhas:
-
-1. Quem iniciou a requisição e quem respondeu?
-2. Qual é a diferença entre o arquivo HTML e o DOM observado no navegador?
-3. Qual evidência prova que a equipe concluiu o primeiro incremento?
-4. Qual rota de execução a dupla utilizou: npm/npx ou Python?
+1. O navegador iniciou a requisição, e o servidor HTTP respondeu com os arquivos HTML, CSS e JavaScript.
+2. O arquivo HTML é a fonte declarada; o DOM é a estrutura que o navegador montou e pode ser alterada pelo JavaScript.
+3. A evidência é o primeiro commit registrado no `git log -1 --oneline`, com a página funcionando por HTTP.
+4. A rota utilizada foi npm/npx, com `npx serve .`.

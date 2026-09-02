@@ -1,22 +1,22 @@
-# Backlog inicial
+# Backlog da loja de jogos
 
 > Este é um exemplo inicial. A equipe deve adaptar as histórias ao problema escolhido e manter a ordem de prioridade.
 
-## P1 — Entender a proposta
+## P1 — Encontrar um jogo adequado
 
-**Como** visitante, **quero** compreender a proposta **para** saber qual problema o projeto pretende resolver.
+**Como** visitante, **quero** entender a proposta da loja **para** encontrar um jogo que combine comigo.
 
-**Critério observável:** título e descrição aparecem sem erros na página.
+**Critério observável:** título, descrição e tema da loja aparecem sem erros na página.
 
-## P2 — Registrar interesse
+## P2 — Receber uma recomendação
 
-**Como** visitante, **quero** marcar interesse **para** indicar que a proposta é relevante para mim.
+**Como** visitante, **quero** solicitar uma recomendação **para** descobrir meu próximo jogo.
 
-**Critério observável:** o botão produz uma confirmação visível.
+**Critério observável:** o botão produz uma recomendação visível na área de status.
 
-## P3 — Receber retorno da ação
+## P3 — Confirmar a interação
 
-**Como** visitante, **quero** visualizar uma mensagem **para** saber que meu clique foi reconhecido.
+**Como** visitante, **quero** visualizar uma mensagem de confirmação **para** saber que meu clique foi reconhecido.
 
 **Critério observável:** o texto de status muda após o clique.
 
@@ -25,4 +25,3 @@
 - [ ] ________________________________________________________________
 - [ ] ________________________________________________________________
 - [ ] ________________________________________________________________
-
