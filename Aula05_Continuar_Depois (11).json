@@ -1,0 +1,66 @@
+{
+  "schema": "ifma-web-aula05-checkpoint-v1",
+  "savedAt": "2026-11-11T18:51:26.132Z",
+  "code": "/**\n * AULA 05 — LABORATÓRIO VIVO · TUTORIAL WEB ↔ MOBILE | IFMA\n * ------------------------------------------------------------\n * ESTE É O ARQUIVO COMPLETO QUE VOCÊ EDITA.\n * Em vez de copiar fragmentos de slides, siga as sete etapas\n * numeradas [01] a [07] dentro deste único arquivo.\n *\n * Web: React Native Web desenha estes componentes no navegador.\n * Mobile: Expo/React Native pode reutilizar este mesmo componente.\n * Os registros são fictícios e existem apenas na memória da tela.\n */\n\n// [01] IMPORTAÇÕES — de onde vêm as ferramentas do componente?\n// useState guarda informações que mudam enquanto o usuário interage.\nimport React, { useState } from 'react';\n// No React Native, usamos View/Text/TextInput, e não div/p/input.\nimport { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';\n\n// [02] CONFIGURAÇÕES — estes valores ficam no alto para serem encontrados.\n// MISSÃO 03: altere o título e observe o resultado nas duas telas.\nexport const TITULO_APLICACAO = 'Memórias IFMA';\n// MISSÃO 04: personalize a dica que aparece dentro do campo.\nexport const DICA_CAMPO = 'Ex.: Bibilioteca escolar';\n// MISSÕES 05 e 06: teste os limites inferior e superior da validação.\nexport const MINIMO_CARACTERES = 7;\nexport const MAXIMO_CARACTERES = 30;\n// MISSÕES 07 a 10: personalize textos e uma cor compartilhada.\nexport const TEXTO_BOTAO = 'Salvar registros de memória';\nexport const PREFIXO_ERRO = 'Título curto: digite no mínimo';\nexport const MENSAGEM_SUCESSO = 'Registro validado nesta sessão.';\nexport const COR_BOTAO = '#1f4f83';\n\n// [03] REGRA DE NEGÓCIO — esta função não depende da tela.\n// Entrada: qualquer texto digitado. Saída: {valido, texto, erro}.\n// .trim() remove espaços APENAS das extremidades, não do meio.\n// No Vue e no React a regra pode ser a mesma; muda a ligação à tela.\nexport function validarTitulo(valor: string) {\n  const texto = valor.trim(\"  Memória  coletiva   \" );\n  if (texto.length < MINIMO_CARACTERES) {\n    return {\n      valido: false,\n      texto,\n      erro: `${PREFIXO_ERRO} ${MINIMO_CARACTERES} caracteres.`,\n    };\n  }\n  if (texto.length > MAXIMO_CARACTERES) {\n    return {\n      valido: false,\n      texto,\n      erro: `Use no máximo ${MAXIMO_CARACTERES} caracteres.`,\n    };\n  }\n  return { valido: true, texto, erro: '' };\n}\n\n// [04] COMPONENTE — cada tela Web/Mobile cria SUA PRÓPRIA instância.\nexport default function ProjetoUniversal() {\n  // No Vue vimos: const titulo = ref('') e titulo.value = texto.\n  // Em React, useState devolve [valor atual, função que atualiza].\n  const [titulo, setTitulo] = useState('');\n  // Os dois contadores NÃO são sincronizados: não há API nesta aula.\n  const [total, setTotal] = useState(0);\n  const [ultima, setUltima] = useState('');\n  const [erro, setErro] = useState('');\n  const [sucesso, setSucesso] = useState('');\n\n  // ORIENTAÇÃO COMPREENSÍVEL PARA TODOS:\n  // placeholder={DICA_CAMPO} mostra um EXEMPLO apenas com o campo vazio.\n  // accessibilityHint={orientacao} informa a regra à tecnologia assistiva,\n  // mas não desenha um texto na tela. Por isso, exibimos a MESMA regra em\n  // um <Text> visível. Mudar MINIMO/MAXIMO no bloco [02] atualiza ambos.\n  const orientacao = `Digite de ${MINIMO_CARACTERES} a ${MAXIMO_CARACTERES} caracteres. Espaços nas extremidades não contam.`;\n\n  // [05] AÇÃO DO USUÁRIO — Pressable chama registrar() com onPress.\n  // 1. Lê o estado; 2. valida; 3. se inválido, PARA com return.\n  // 4. Se válido, atualiza contador, última memória e feedback.\n  function registrar() {\n    const resultado = validarTitulo(titulo);\n    if (!resultado.valido) {\n      setErro(resultado.erro);\n      setSucesso('');\n      return; // Sem isso, um título inválido também seria registrado!\n    }\n    setTotal((atual) => atual + 1);\n    setUltima(resultado.texto); // Já normalizado pela função pura.\n    setTitulo('');             // Limpa o TextInput porque value={titulo}.\n    setErro('');\n    setSucesso(MENSAGEM_SUCESSO);\n  }\n\n  // [06] INTERFACE — o mesmo JSX é renderizado no navegador e no Expo.\n  // Siga o fluxo: TextInput → setTitulo → titulo → validarTitulo\n  // → registrar → setTotal/setErro → JSX redesenhado por React.\n  return (\n    <View style={styles.pagina} testID=\"app-universal\">\n      <Text style={styles.selo}>IFMA · LABORATÓRIO 05</Text>\n      <Text style={styles.titulo}>{TITULO_APLICACAO}</Text>\n      <Text style={styles.intro}>\n        Um exemplo fictício para observar o mesmo componente na Web e no celular.\n      </Text>\n\n      <Text style={styles.rotulo}>Título da memória</Text>\n      {/* Rótulo visível ≠ placeholder ≠ accessibilityHint: cada um tem uma função. */}\n      <TextInput\n        testID=\"campo-titulo\"\n        accessibilityLabel=\"Título da memória\"\n        accessibilityHint={orientacao}\n        value={titulo} // O campo mostra exatamente o valor do estado React.\n        onChangeText={(valor) => {\n          setTitulo(valor);  // Atualiza o estado a cada digitação.\n          setErro('');       // Corrigir o campo remove a mensagem antiga.\n          setSucesso('');    // Novo texto já não é um registro concluído.\n        }}\n        placeholder={DICA_CAMPO}\n        style={styles.entrada}\n      />\n      {/* Regra sempre visível e idêntica ao accessibilityHint.\n          Diferentemente do placeholder, ela permanece após digitar. */}\n      <Text testID=\"ajuda-titulo\" style={styles.ajudaCampo}>\n        {orientacao}\n      </Text>\n      {/* Este contador usa o mesmo trim() da regra de validação [03]. */}\n      <Text testID=\"contador-caracteres\" style={styles.contadorCampo}>\n        Caracteres considerados: {titulo.trim().length}\n      </Text>\n      {erro ? (\n        <Text testID=\"erro-titulo\" accessibilityRole=\"alert\" style={styles.erro}>\n          {erro}\n        </Text>\n      ) : null}\n\n      <Pressable\n        testID=\"botao-registrar\"\n        accessibilityRole=\"button\"\n        accessibilityLabel={TEXTO_BOTAO}\n        onPress={registrar} // Referência: NÃO escreva registrar() aqui.\n        style={styles.botao}\n      >\n        <Text style={styles.textoBotao}>{TEXTO_BOTAO}</Text>\n      </Pressable>\n\n      {sucesso ? (\n        <Text testID=\"mensagem-sucesso\" accessibilityRole=\"alert\" style={styles.sucesso}>\n          {sucesso}\n        </Text>\n      ) : null}\n\n      <View style={styles.resumo}>\n        <Text style={styles.resumoRotulo}>REGISTROS NESTA SESSÃO</Text>\n        <Text testID=\"contador\" style={styles.contador}>{total}</Text>\n        <Text style={styles.resumoRotulo}>ÚLTIMA MEMÓRIA</Text>\n        <Text testID=\"ultima-memoria\" style={styles.ultima}>\n          {ultima || 'Nenhuma memória registrada'}\n        </Text>\n      </View>\n      <Text style={styles.rodape}>Sem servidor · sem dados pessoais · sem envio ao professor</Text>\n    </View>\n  );\n}\n\n// [07] ESTILOS — StyleSheet.create organiza a apresentação da tela.\n// Em React Native, não usamos CSS como no Vue. A propriedade é em camelCase.\n// MISSÃO 10: altere COR_BOTAO no bloco [02]; este estilo será atualizado.\nconst styles = StyleSheet.create({\n  pagina: { padding: 22, backgroundColor: '#ffffff', borderRadius: 16, width: '100%' },\n  selo: { color: '#146c43', fontWeight: '800', fontSize: 12 },\n  titulo: { color: '#163d29', fontSize: 25, fontWeight: '800', marginTop: 8 },\n  intro: { color: '#485b51', fontSize: 14, lineHeight: 21, marginTop: 6, marginBottom: 20 },\n  rotulo: { color: '#243c2e', fontWeight: '700', fontSize: 14, marginBottom: 7 },\n  entrada: { borderColor: '#718c79', borderWidth: 1.5, borderRadius: 9, padding: 12, minHeight: 48, fontSize: 16, color: '#142e1c' },\n  ajudaCampo: { color: '#3b5c4b', fontSize: 12, lineHeight: 18, marginTop: 7 },\n  contadorCampo: { color: '#155b3d', fontWeight: '700', fontSize: 12, marginTop: 4 },\n  erro: { color: '#a12824', fontSize: 14, marginTop: 8 },\n  botao: { backgroundColor: COR_BOTAO, borderRadius: 10, minHeight: 48, padding: 12, marginTop: 15, justifyContent: 'center', alignItems: 'center' },\n  textoBotao: { color: '#ffffff', fontWeight: '800', fontSize: 15 },\n  sucesso: { color: '#145635', fontSize: 14, fontWeight: '700', marginTop: 12 },\n  resumo: { backgroundColor: '#edf7f1', borderRadius: 12, padding: 15, marginTop: 20 },\n  resumoRotulo: { color: '#406351', fontSize: 11, fontWeight: '800' },\n  contador: { color: '#0b5d38', fontSize: 35, fontWeight: '800', marginBottom: 10 },\n  ultima: { color: '#173c29', fontSize: 15, marginTop: 5 },\n  rodape: { color: '#5d7568', fontSize: 11, marginTop: 16 },\n});\n",
+  "activeTask": "quiz",
+  "answers": {
+    "map-q1": "a",
+    "map-q2": "b",
+    "quiz-q1": "a",
+    "quiz-q2": "b"
+  },
+  "completed": [
+    "run",
+    "map",
+    "title",
+    "placeholder",
+    "limit",
+    "maximum",
+    "button",
+    "error",
+    "success",
+    "color",
+    "trim",
+    "invalid",
+    "isolation",
+    "quiz"
+  ],
+  "details": {
+    "run": "O arquivo TSX gerou as duas interfaces.",
+    "map": "useState guarda; onChangeText atualiza.",
+    "title": "Título atualizado nas duas renderizações.",
+    "placeholder": "A dica foi atualizada nos dois campos.",
+    "limit": "Bordas 6/7 e remoção de espaços aprovadas.",
+    "maximum": "Bordas 30/31 caracteres verificadas.",
+    "button": "O botão foi renomeado em ambas as prévias.",
+    "error": "Mensagem nova ligada à validação real das duas telas.",
+    "success": "Feedback de sucesso atualizado e testado nas duas telas.",
+    "color": "A cor nova chegou aos dois botões.",
+    "trim": "Espaços externos removidos, internos preservados.",
+    "invalid": "Espaços e título curto bloqueados; erro antigo apagado ao corrigir.",
+    "isolation": "Mesmo código, duas instâncias independentes; nenhuma sincronização automática.",
+    "quiz": "React Native Web renderiza no navegador; Expo permite execução em dispositivo real."
+  },
+  "note": "",
+  "nativeNote": "",
+  "xp": 100,
+  "team": {
+    "teamId": "f8d957eb-dbc3-4ca0-bcba-7fe48d9cc126",
+    "team": "equipe 67",
+    "members": [
+      {
+        "enrollment": "20241008.ITA0002",
+        "name": "Riquellme Mendes e Mendes"
+      },
+      {
+        "enrollment": "20241008.ITA0027",
+        "name": "Tiago Nogueira da Cruz de Queiroz"
+      },
+      {
+        "enrollment": "20241008.ITA0028",
+        "name": "Rian Bezerra Silva"
+      }
+    ]
+  },
+  "warning": "XP acumulativos e formativos, não nota oficial. Alterar código não apaga conquistas; Conferir progresso testa a versão atual."
+}
